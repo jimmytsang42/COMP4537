@@ -17,6 +17,10 @@ class GameInitializer {
     constructor(formId) {
         this.form = document.getElementById(formId);
         this.setupEventListener();
+
+        document.title = MESSAGES.title;
+        document.getElementById('buttonLabel').innerText = MESSAGES.label;
+        document.getElementById('goButton').value = MESSAGES.goButtonText;
     }
 
     // Event listener listens for the submit event, gets the number of buttons, validates the input, and starts the Game
@@ -147,10 +151,10 @@ class Game {
     // Positions the buttons in the container, taking into account possible wrapping if needed
     positionButtons() {
         let x = 0;
-        let y = document.getElementById(FORM_ID).offsetHeight + 20; 
+        let y = document.getElementById(FORM_ID).offsetHeight + 20;
 
         this.buttonManager.getButtons().forEach((button, index) => {
-            if (index > 0 && (x + 160) > this.windowWidth) { 
+            if (index > 0 && (x + 160) > this.windowWidth) {
                 x = 0;
                 y += 80;
             }
@@ -164,28 +168,28 @@ class Game {
         const formHeight = document.getElementById(FORM_ID).offsetHeight;
         this.buttonManager.getButtons().forEach((button) => {
             const x = Math.random() * (this.windowWidth - 160);
-            const y = formHeight + 20 + Math.random() * (this.windowHeight - formHeight - 100); 
+            const y = formHeight + 20 + Math.random() * (this.windowHeight - formHeight - 100);
             button.setPosition(x, y);
         });
     }
 
     // Scrambles the buttons multiple times with a delay between each scramble
     scrambleMultipleTimes() {
-        this.disableAllButtons(); 
-        let shuffleCount = this.buttonCount - 1; 
-        this.scrambleButtons(); 
+        this.disableAllButtons();
+        let shuffleCount = this.buttonCount - 1;
+        this.scrambleButtons();
 
         let interval = setInterval(() => {
 
-            this.scrambleButtons(); 
-            shuffleCount--; 
+            this.scrambleButtons();
+            shuffleCount--;
             if (shuffleCount === 0) {
                 clearInterval(interval);
-                this.isGameActive = true; 
-                this.enableAllButtons(); 
+                this.isGameActive = true;
+                this.enableAllButtons();
                 return;
             }
-        }, 2000); 
+        }, 2000);
     }
 
     // Checks if the clicked button is in the correct order, updates the button text, and shows a message if the order is correct or incorrect
@@ -196,9 +200,9 @@ class Game {
 
             if (this.currentOrder.length === 0) {
                 setTimeout(() => {
-                    alert(MESSAGES.correctOrder); 
+                    alert(MESSAGES.correctOrder);
                     this.endGame();
-                }, 100); 
+                }, 100);
             }
         } else {
             alert(MESSAGES.wrongOrder);
@@ -217,20 +221,20 @@ class Game {
     // Ends the game by disabling all buttons
     endGame() {
         this.isGameActive = false;
-        this.disableAllButtons(); 
+        this.disableAllButtons();
     }
 
     // Disables all buttons, preventing further clicks
     disableAllButtons() {
         this.buttonManager.getButtons().forEach((button) => {
-            button.buttonElement.disabled = true; 
+            button.buttonElement.disabled = true;
         });
     }
 
     // Enables all buttons, allowing clicks
     enableAllButtons() {
         this.buttonManager.getButtons().forEach((button) => {
-            button.buttonElement.disabled = false; 
+            button.buttonElement.disabled = false;
         });
     }
 }
