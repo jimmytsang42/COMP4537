@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Writer</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
-    <h1>Writer</h1>
-    <p id="last-saved-time">Stored at:</p>
+    <h1 id="writerHeader"></h1>
+    <p id="last-saved-time"></p>
     <div id="notes-container"></div>
-    <button id="add-note">Add Note</button>
-    <a href="index.html">Back to Index</a>
+    <div id="button-container">
+        <button id="add-note"></button>
+        <button id="back-to-index"></button>
+    </div>
+
     <script src="./lang/messages/en/user.js"></script>
     <script src="./js/writer.js"></script>
 </body>
+
 </html>
