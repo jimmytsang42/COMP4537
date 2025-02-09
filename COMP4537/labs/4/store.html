@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Definition</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <h2 id="title"></h2>
+    <form id="storeForm">
+        <label for="word" id="wordLabel"></label>
+        <input type="text" id="word" required>
+        <br><br>
+        <label for="definition" id="definitionLabel"></label>
+        <textarea id="definition" required></textarea>
+        <br><br>
+        <button type="submit" id="submitButton"></button>
+    </form>
+    <p id="response"></p>
+
+    <script src="./lang/messages/en/user.js"></script>
+    <script src="./js/store.js"></script>
+</body>
+</html>
