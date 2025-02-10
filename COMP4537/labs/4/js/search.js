@@ -22,7 +22,7 @@ class Search {
         event.preventDefault();
         let word = document.getElementById("searchWord").value.trim();
 
-        if (!word || !/^[A-Za-z ]+$/.test(word)) {
+        if (!word || !/^[A-Za-z\s]+$/.test(word)) {
             this.displayResult(this.userStrings.invalidInput);
             return;
         }
@@ -33,29 +33,35 @@ class Search {
     fetchData(word) {
         let xhr = new XMLHttpRequest();
         xhr.open("GET", `${this.apiUrl}?word=${encodeURIComponent(word)}`, true);
-    
+
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 try {
                     let responseData = JSON.parse(xhr.responseText);
-    
+
                     if (xhr.status === 200) {
                         this.displayResult(`${word}: ${responseData.definition}`);
+                    } else if (xhr.status === 400) {
+                        this.displayResult(responseData.error);
                     } else if (xhr.status === 404) {
-                        this.displayResult(`Request# ${responseData.numberOfRequests}, word '${word}' not found!`);
+                        let resultMessage = USER_STRINGS.wordNotFound
+                            .replace("%1", responseData.numberOfRequests)
+                            .replace("%2", word);
+                        this.displayResult(resultMessage);
                     } else {
                         // show the response text of other errors
                         this.displayResult(xhr.responseText);
                     }
                 } catch (error) {
                     // error if the response is not valid JSON
-                    this.displayResult("Error parsing response.");
+                    this.displayResult(userStrings.errorParsingResponse);
                 }
             }
         };
-    
+
         xhr.send();
     }
+
 
     displayResult(message) {
         document.getElementById("searchResult").innerText = message;

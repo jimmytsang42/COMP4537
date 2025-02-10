@@ -9,6 +9,8 @@ const USER_STRINGS = {
     invalidInput: "Invalid input. Word must have only text.",
     storeSuccess: "Definition was stored successfully.",
     searchNotFound: "Definition not found.",
+    errorParsingResponse: "Error parsing response.",
+    wordNotFound: "Request# %1, word '%2' not found."
 };
 
 const LAB4_MESSAGES = {

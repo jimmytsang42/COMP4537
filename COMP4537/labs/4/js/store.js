@@ -24,7 +24,7 @@ class Store {
         let word = document.getElementById("word").value.trim();
         let definition = document.getElementById("definition").value.trim();
 
-        if (!word || !/^[A-Za-z ]+$/.test(word) || !definition) {
+        if (!word || !/^[A-Za-z\s]+$/.test(word) || !definition) {
             this.displayResponse(this.userStrings.invalidInput);
             return;
         }
@@ -36,20 +36,31 @@ class Store {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", this.apiUrl, true);
         xhr.setRequestHeader("Content-Type", "application/json");
-    
+
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    this.displayResponse(this.userStrings.storeSuccess);
-                } else {
-                    this.displayResponse(xhr.responseText);
+                try {
+                    let responseData = JSON.parse(xhr.responseText);
+
+                    if (xhr.status === 200 || xhr.status === 201) {
+                        this.displayResponse(responseData.message);
+                    } else if (xhr.status === 400 || xhr.status === 409) {
+                        this.displayResponse(responseData.error);
+                    } else {
+                        // handle other unexpected errors
+                        this.displayResponse(xhr.responseText);
+                    }
+                } catch (error) {
+                    // error if the response is not valid JSON
+                    this.displayResponse(userStrings.errorParsingResponse);
                 }
             }
         };
-    
+
         xhr.send(JSON.stringify(data));
     }
-    
+
+
 
     displayResponse(message) {
         document.getElementById("response").innerText = message;
