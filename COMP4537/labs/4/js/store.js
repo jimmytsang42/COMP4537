@@ -1,36 +1,58 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Set user-facing text
-    document.getElementById("title").innerText = USER_STRINGS.storeTitle;
-    document.getElementById("wordLabel").innerText = USER_STRINGS.wordLabel;
-    document.getElementById("definitionLabel").innerText = USER_STRINGS.definitionLabel;
-    document.getElementById("submitButton").innerText = USER_STRINGS.submitButton;
+class Store {
+    constructor(apiUrl, userStrings) {
+        this.apiUrl = apiUrl;
+        this.userStrings = userStrings;
+        this.initializeStore();
+    }
 
-    document.getElementById("storeForm").addEventListener("submit", function (event) {
+    initializeStore() {
+        document.addEventListener("DOMContentLoaded", () => {
+            this.setUserFacingText();
+            document.getElementById("storeForm").addEventListener("submit", (event) => this.handleSubmit(event));
+        });
+    }
+
+    setUserFacingText() {
+        document.getElementById("title").innerText = this.userStrings.storeTitle;
+        document.getElementById("wordLabel").innerText = this.userStrings.wordLabel;
+        document.getElementById("definitionLabel").innerText = this.userStrings.definitionLabel;
+        document.getElementById("submitButton").innerText = this.userStrings.submitButton;
+    }
+
+    handleSubmit(event) {
         event.preventDefault();
         let word = document.getElementById("word").value.trim();
         let definition = document.getElementById("definition").value.trim();
 
-       // Enhanced validation: Allows only letters and spaces for 'word', ensures 'definition' is non-empty
-       if (!word || !/^[A-Za-z ]+$/.test(word) || !definition) {
-        document.getElementById("response").innerText = USER_STRINGS.invalidInput;
-        return;
+        if (!word || !/^[A-Za-z ]+$/.test(word) || !definition) {
+            this.displayResponse(this.userStrings.invalidInput);
+            return;
+        }
+
+        this.sendData({ word, definition });
     }
 
+    sendData(data) {
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "https://sarahliu.dev/COMP4537/labs/4/api/definitions", true);
+        xhr.open("POST", this.apiUrl, true);
         xhr.setRequestHeader("Content-Type", "application/json");
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                document.getElementById("response").innerText = xhr.status === 200 ? USER_STRINGS.storeSuccess : xhr.responseText;
+                this.displayResponse(xhr.status === 200 ? this.userStrings.storeSuccess : xhr.responseText);
             }
         };
 
-        let data = JSON.stringify({ word: word, definition: definition });
-        xhr.send(data);
-    });
-});
+        xhr.send(JSON.stringify(data));
+    }
 
+    displayResponse(message) {
+        document.getElementById("response").innerText = message;
+    }
+}
+
+// Initialize the store class
+const store = new Store("https://sarahliu.dev/COMP4537/labs/4/api/definitions", USER_STRINGS);
 
 
 /* ChatGPT was used to:

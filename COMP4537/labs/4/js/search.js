@@ -1,36 +1,55 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Set user-facing text
-    document.getElementById("searchTitle").innerText = USER_STRINGS.searchTitle;
-    document.getElementById("searchWordLabel").innerText = USER_STRINGS.searchWordLabel;
-    document.getElementById("searchButton").innerText = USER_STRINGS.searchButton;
+class Search {
+    constructor(apiUrl, userStrings) {
+        this.apiUrl = apiUrl;
+        this.userStrings = userStrings;
+        this.initializeSearch();
+    }
 
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
+    initializeSearch() {
+        document.addEventListener("DOMContentLoaded", () => {
+            this.setUserFacingText();
+            document.getElementById("searchForm").addEventListener("submit", (event) => this.handleSearch(event));
+        });
+    }
+
+    setUserFacingText() {
+        document.getElementById("searchTitle").innerText = this.userStrings.searchTitle;
+        document.getElementById("searchWordLabel").innerText = this.userStrings.searchWordLabel;
+        document.getElementById("searchButton").innerText = this.userStrings.searchButton;
+    }
+
+    handleSearch(event) {
         event.preventDefault();
         let word = document.getElementById("searchWord").value.trim();
-        
 
-        // Enhanced validation: Allows letters and spaces, but no numbers or special characters
         if (!word || !/^[A-Za-z ]+$/.test(word)) {
-            document.getElementById("searchResult").innerText = USER_STRINGS.invalidInput;
+            this.displayResult(this.userStrings.invalidInput);
             return;
         }
 
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://sarahliu.dev/COMP4537/labs/4/api/definitions?word=" + encodeURIComponent(word), true);
+        this.fetchData(word);
+    }
 
-        xhr.onreadystatechange = function () {
+    fetchData(word) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", `${this.apiUrl}?word=${encodeURIComponent(word)}`, true);
+
+        xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                if (xhr.status === 200 && xhr.responseText) {
-                    document.getElementById("searchResult").innerText = xhr.responseText;
-                } else {
-                    document.getElementById("searchResult").innerText = USER_STRINGS.searchNotFound;
-                }
+                this.displayResult(xhr.status === 200 && xhr.responseText ? xhr.responseText : this.userStrings.searchNotFound);
             }
         };
 
         xhr.send();
-    });
-});
+    }
+
+    displayResult(message) {
+        document.getElementById("searchResult").innerText = message;
+    }
+}
+
+// Initialize the search class
+const search = new Search("https://sarahliu.dev/COMP4537/labs/4/api/definitions", USER_STRINGS);
 
 
 /* ChatGPT was used to:
