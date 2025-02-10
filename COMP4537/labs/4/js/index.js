@@ -6,9 +6,3 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("search-link").textContent = LAB4_MESSAGES.searchLinkText;
     document.getElementById("store-link").textContent = LAB4_MESSAGES.storeLinkText;
 });
-
-/* ChatGPT was used to:
-- Provide outline of OOP structure
-- Check for coding style and consistency
-- Give suggestions for what methods to call
-*/

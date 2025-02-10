@@ -8,13 +8,15 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault();
         let word = document.getElementById("searchWord").value.trim();
         
-        if (!word || /\d/.test(word)) { // Basic validation
+
+        // Enhanced validation: Allows letters and spaces, but no numbers or special characters
+        if (!word || !/^[A-Za-z ]+$/.test(word)) {
             document.getElementById("searchResult").innerText = USER_STRINGS.invalidInput;
             return;
         }
 
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://yourDomainName2.wyz/api/definitions/?word=" + encodeURIComponent(word), true);
+        xhr.open("GET", "https://sarahliu.dev/COMP4537/labs/4/api/definitions?word=" + encodeURIComponent(word), true);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
