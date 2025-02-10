@@ -36,15 +36,20 @@ class Store {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", this.apiUrl, true);
         xhr.setRequestHeader("Content-Type", "application/json");
-
+    
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                this.displayResponse(xhr.status === 200 ? this.userStrings.storeSuccess : xhr.responseText);
+                if (xhr.status === 200) {
+                    this.displayResponse(this.userStrings.storeSuccess);
+                } else {
+                    this.displayResponse(xhr.responseText);
+                }
             }
         };
-
+    
         xhr.send(JSON.stringify(data));
     }
+    
 
     displayResponse(message) {
         document.getElementById("response").innerText = message;

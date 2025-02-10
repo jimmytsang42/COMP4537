@@ -33,13 +33,27 @@ class Search {
     fetchData(word) {
         let xhr = new XMLHttpRequest();
         xhr.open("GET", `${this.apiUrl}?word=${encodeURIComponent(word)}`, true);
-
+    
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                this.displayResult(xhr.status === 200 && xhr.responseText ? xhr.responseText : this.userStrings.searchNotFound);
+                try {
+                    let responseData = JSON.parse(xhr.responseText);
+    
+                    if (xhr.status === 200) {
+                        this.displayResult(`${word}: ${responseData.definition}`);
+                    } else if (xhr.status === 404) {
+                        this.displayResult(`Request# ${responseData.numberOfRequests}, word '${word}' not found!`);
+                    } else {
+                        // show the response text of other errors
+                        this.displayResult(xhr.responseText);
+                    }
+                } catch (error) {
+                    // error if the response is not valid JSON
+                    this.displayResult("Error parsing response.");
+                }
             }
         };
-
+    
         xhr.send();
     }
 
