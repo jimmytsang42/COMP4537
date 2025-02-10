@@ -75,4 +75,5 @@ const store = new Store("https://sarahliu.dev/COMP4537/labs/4/api/definitions", 
 - Provide outline of OOP structure
 - Check for coding style and consistency
 - Give suggestions for what methods to call
+- Help with Regex
 */
