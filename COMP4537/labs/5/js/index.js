@@ -20,6 +20,7 @@ class PatientDB {
         document.getElementById("insertPatientsButton").innerText = this.userStrings.insertPatientsButton;
         document.getElementById("sqlQuery").placeholder = this.userStrings.sqlQueryPlaceholder;
         document.getElementById("runQueryButton").innerText = this.userStrings.runQueryButton;
+        document.getElementById("lab5Header").innerText = this.userStrings.pageTitle
     }
 
     addEventListeners() {
@@ -60,7 +61,7 @@ class PatientDB {
     insertPatients() {
         // Insert predefined patients into the database
         const sql = `
-            INSERT INTO patient (name, dateOfBirth) VALUES
+            INSERT INTO patients (name, dateOfBirth) VALUES
             ('Sara Brown', '1901-01-01'),
             ('John Smith', '1941-01-01'),
             ('Jack Ma', '1961-01-30'),
@@ -74,7 +75,7 @@ class PatientDB {
         const query = document.getElementById("sqlQuery").value.trim();
 
         if (!query) {
-            alert("Please enter an SQL query!");
+            alert(this.userStrings.blankQueryError);
             return;
         }
 
@@ -84,9 +85,10 @@ class PatientDB {
             this.sendRequest("GET", query);
         } else if (upperQuery.startsWith("INSERT")) {
             this.sendRequest("POST", query);
-        } else {
-            alert(this.userStrings.queryError);
-        }
+        } 
+        // else {
+        //     alert(this.userStrings.queryError);
+        // }
     }
 
     displayResponse(message) {
