@@ -1,0 +1,12 @@
+#insertPatientsButton, #runQueryButton {
+    margin-bottom: 15px; 
+}
+
+#sqlQuery {
+    display: block;
+    margin-bottom: 15px;
+}
+
+#response {
+    margin-top: 20px;
+}

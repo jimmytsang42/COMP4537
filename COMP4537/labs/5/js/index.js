@@ -1,4 +1,3 @@
-// script.js
 class PatientDB {
     constructor(apiUrl, userStrings) {
         this.apiUrl = apiUrl;
@@ -7,7 +6,7 @@ class PatientDB {
     }
 
     initialize() {
-        // Set user-facing text when the document is loaded
+        // set user-facing text when the document is loaded
         document.addEventListener("DOMContentLoaded", () => {
             this.setUserFacingText();
             this.addEventListeners();
@@ -15,7 +14,7 @@ class PatientDB {
     }
 
     setUserFacingText() {
-        // Set text values for the page
+        // set user-facing text values for the page
         document.title = this.userStrings.pageTitle;
         document.getElementById("insertPatientsButton").innerText = this.userStrings.insertPatientsButton;
         document.getElementById("sqlQuery").placeholder = this.userStrings.sqlQueryPlaceholder;
@@ -24,13 +23,13 @@ class PatientDB {
     }
 
     addEventListeners() {
-        // Add event listeners for buttons
+        // add event listeners for buttons
         document.getElementById("insertPatientsButton").addEventListener("click", () => this.insertPatients());
         document.getElementById("runQueryButton").addEventListener("click", () => this.sendQuery());
     }
 
     sendRequest(method, query) {
-        // Prepare and send the request to server2
+        // prepare and send the request to server2
         const xhr = new XMLHttpRequest();
         let url = this.apiUrl;
 
@@ -46,7 +45,11 @@ class PatientDB {
                 if (xhr.status === 200) {
                     this.displayResponse(xhr.responseText);
                 } else {
-                    this.displayResponse(this.userStrings.responseError);
+                    const errorMsg = USER_STRINGS.errorMessageTemplate
+                        .replace("%1", xhr.status)
+                        .replace("%2", xhr.statusText || USER_STRINGS.responseError);
+
+                    this.displayResponse(errorMsg);
                 }
             }
         };
@@ -59,7 +62,7 @@ class PatientDB {
     }
 
     insertPatients() {
-        // Insert predefined patients into the database
+        // insert predefined patients into the database
         const sql = `
             INSERT INTO patients (name, dateOfBirth) VALUES
             ('Sara Brown', '1901-01-01'),
@@ -71,31 +74,38 @@ class PatientDB {
     }
 
     sendQuery() {
-        // Get query input from user and determine method
+        // get the query input from user and determine method (ie GET or POST)
         const query = document.getElementById("sqlQuery").value.trim();
-    
+
         if (!query) {
             alert(this.userStrings.blankQueryError);
             return;
         }
-    
+
         const upperQuery = query.toUpperCase();
-    
+
         if (upperQuery.startsWith("SELECT")) {
             this.sendRequest("GET", query);
-        } else if (upperQuery.startsWith("INSERT") || upperQuery.startsWith("DELETE") || upperQuery.startsWith("UPDATE") || upperQuery.startsWith("DROP")) {
-            this.sendRequest("POST", query); // Sending as a POST request
-        } else {
+        } else if (upperQuery.startsWith("INSERT")) {
+            this.sendRequest("POST", query);
+        }
+        else {
             alert(this.userStrings.queryError);
         }
     }
-    
 
     displayResponse(message) {
-        // Display server response
+        // display the server response
         document.getElementById("response").innerText = message;
     }
 }
 
-// Initialize the PatientDB class with appropriate API URL and user strings
+// initialize the PatientDB class with appropriate API URL and user strings
 const patientDB = new PatientDB("https://sarahliu.dev/COMP4537/labs/5/api/v1/sql", USER_STRINGS);
+
+/* ChatGPT was used to:
+- Provide outline of OOP structure
+- Check for coding style and consistency
+- Give suggestions for what methods to call
+- Help with error handling
+*/
