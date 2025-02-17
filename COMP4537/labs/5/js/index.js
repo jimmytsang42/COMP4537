@@ -73,23 +73,23 @@ class PatientDB {
     sendQuery() {
         // Get query input from user and determine method
         const query = document.getElementById("sqlQuery").value.trim();
-
+    
         if (!query) {
             alert(this.userStrings.blankQueryError);
             return;
         }
-
+    
         const upperQuery = query.toUpperCase();
-
+    
         if (upperQuery.startsWith("SELECT")) {
             this.sendRequest("GET", query);
-        } else if (upperQuery.startsWith("INSERT")) {
-            this.sendRequest("POST", query);
-        } 
-        // else {
-        //     alert(this.userStrings.queryError);
-        // }
+        } else if (upperQuery.startsWith("INSERT") || upperQuery.startsWith("DELETE") || upperQuery.startsWith("UPDATE") || upperQuery.startsWith("DROP")) {
+            this.sendRequest("POST", query); // Sending as a POST request
+        } else {
+            alert(this.userStrings.queryError);
+        }
     }
+    
 
     displayResponse(message) {
         // Display server response
